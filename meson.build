@@ -125,6 +125,8 @@ suil_dep = dependency(
   version: '>= 0.10.0',
 )
 
+cjson_dep = dependency('libcjson')
+
 ###########
 # Drivers #
 ###########
@@ -296,11 +298,12 @@ common_dependencies = [
   suil_dep,
   thread_dep,
   zix_dep,
+  cjson_dep,
 ]
 
 # Internal JACK client library
 if jack_dep.found()
-  shared_library(
+  libjalv = shared_library(
     'jalv',
     sources + files('src/jalv_console.c'),
     c_args: c_suppressions + platform_defines + ['-DHAVE_SUIL=0'],
@@ -316,6 +319,15 @@ endif
 executable(
   'jalv',
   sources + files('src/jalv_console.c'),
+  c_args: c_suppressions + platform_defines + suil_defines,
+  dependencies: common_dependencies + [suil_dep],
+  include_directories: include_directories('src'),
+  install: true,
+)
+
+executable(
+  'jalv.client_node',
+  sources + files('src/jalv_client_node.c'),
   c_args: c_suppressions + platform_defines + suil_defines,
   dependencies: common_dependencies + [suil_dep],
   include_directories: include_directories('src'),

@@ -558,9 +558,6 @@ jalv_send_to_plugin(void* const jalv_handle,
 void
 jalv_apply_ui_events(Jalv* jalv, uint32_t nframes)
 {
-  if (!jalv->has_ui) {
-    return;
-  }
 
   ControlChange ev    = {0U, 0U, 0U};
   const size_t  space = zix_ring_read_space(jalv->ui_to_plugin);
@@ -691,7 +688,7 @@ jalv_dump_atom(Jalv* const           jalv,
                const LV2_Atom* const atom,
                const int             color)
 {
-  if (jalv->opts.dump) {
+  if (true) {
     char* const str = sratom_to_turtle(jalv->sratom,
                                        &jalv->unmap,
                                        "jalv:",
